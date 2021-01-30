@@ -1,3 +1,4 @@
 # Recent Post Header
 ## H2
 Paragraph content
+{{{ categories.posts.contents }}}

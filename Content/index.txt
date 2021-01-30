@@ -1,2 +1,5 @@
-# Index
-(paragraph content)
+## Recent Articles
+{{{ categories.posts.contents }}}
+
+## About
+{{{ categories.about.contents }}}

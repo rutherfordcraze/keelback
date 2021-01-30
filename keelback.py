@@ -1,5 +1,6 @@
-import os, pathlib
+import os, pathlib, time
 import markdown, pystache
+from datetime import datetime
 
 DIR_CONTENT     = "Content"
 DIR_TEMPLATES   = "Templates"
@@ -11,11 +12,13 @@ class Page:
     def __init__(
         self,
         path,
-        title
+        title,
+        ctime = None
         ):
         self.path = path
         self.title = title
         self.slug = title.lower().replace(" ", "_")
+        self.ctime = ctime
 
     def __repr__(self):
         return "page:" + self.slug
@@ -28,7 +31,16 @@ class Page:
 
     @property
     def body(self):
-        return markdown.markdown(self.content)
+        template = markdown.markdown(self.content)
+        r = pystache.Renderer()
+        return r.render(template, dict(categories=get_categories()))
+
+    @property
+    def timestamp(self):
+        if self.ctime:
+            return datetime.utcfromtimestamp(self.ctime).strftime('%b %Y')
+        return None
+    
 
     @property
     def crumb(self):
@@ -49,7 +61,8 @@ class Page:
         return dict(
             vars(self),
             body = self.body,
-            crumb = self.crumb)
+            crumb = self.crumb,
+            timestamp = self.timestamp)
 
     @property
     def html(self):
@@ -82,12 +95,17 @@ class Category:
         return " / ".join(crumb)
 
     @property
-    def pages_list(self):
+    def contents(self):
         ul = ["<ul>"]
         for page in self.pages:
             ul.append("<li>")
             ul.append(get_link(page))
-            ul.append("</li>\n</ul>")
+            if page.timestamp:
+                ul.append("<span class='timestamp'>")
+                ul.append(page.timestamp)
+                ul.append("</span>")
+            ul.append("</li>")
+        ul.append("</ul>")
         return '\n'.join(ul)
     
 
@@ -96,7 +114,7 @@ class Category:
         return dict(
             vars(self),
             crumb = self.crumb,
-            pages_list = self.pages_list)
+            contents = self.contents)
 
     @property
     def html(self):
@@ -112,22 +130,42 @@ def get_inventory():
     inventory = {}
     for path, dirs, files in os.walk(DIR_CONTENT):
         current_dir = path.split('/')[-1]
-        if current_dir != "Media":
-            inventory[current_dir] = Category(current_dir)
+        if current_dir != "media":
+            if current_dir != "Content":
+                inventory[current_dir] = Category(current_dir)
             for file in files:
                 if file.endswith(".txt"):
                     title = file[:-4]
-                    new_page = Page(path, title)
+                    
+                    if current_dir == "posts":
+                        fname = pathlib.Path(os.path.join(path, file))
+                        ctime = int(fname.stat().st_ctime)
+                    else:
+                        ctime = None
+
+                    new_page = Page(path, title, ctime)
                     inventory[new_page.slug] = new_page
-                    print("adding page " + str(new_page) + " to category " + str(current_dir))
-                    inventory[current_dir].add_page(new_page)
+
+                    if current_dir != "Content":
+                        inventory[current_dir].add_page(new_page)
     return inventory
 
 
+def get_categories():
+    if inventory:
+        categories = {}
+        for k, v in inventory.items():
+            value_type = v.__class__.__name__
+            if value_type == "Category":
+                categories[k] = v
+
+        return categories
+
+
 def get_link(page, highlit = False):
-    template = "<a href='/{slug}'>{title}</a>"
+    template = "<a href='/{slug}.html'>{title}</a>"
     if highlit:
-        template = "<a href='/{slug}' class='highlit'>{title}</a>"
+        template = "<a href='/{slug}.html' class='highlit'>{title}</a>"
     return template.format(slug=page.slug, title=page.title)
 
 
@@ -136,14 +174,16 @@ def assemble(slug):
         return "404"
     elif slug == "" or slug == "/":
         slug = "index"
+
     page = inventory[slug]
-    props = dict(
-        page = page.html,
-        title = page.title)
+    props = dict(page = page.html, title = page.title)
+
     with open(os.path.join(DIR_TEMPLATES, "layout.html"), 'r') as f:
         template = f.read()
+
     r = pystache.Renderer()
     return r.render(template, props)
+
 
 def output(slug):
     html = assemble(slug)
@@ -152,9 +192,19 @@ def output(slug):
         f.write(html)
 
 
+def output_all():
+    counter = 0
+    start = time.time()
+    for slug in inventory.keys():
+        output(slug)
+        counter += 1
+    stop = time.time()
+    elapsed = int((stop - start) * 1000)
+
+    print("[KEELBACK] Exported {pages} pages in {time} ms.".format(
+        pages=counter,
+        time=elapsed))
+
+
 inventory = get_inventory()
-# print(inventory, "\n\n———\n")
-# print(assemble("recent_post"), "\n\n———\n")
-print(assemble("recent_post"))
-output("recent_post")
-# print(inventory["Static"].pages)
+output_all()
