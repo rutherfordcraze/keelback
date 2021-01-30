@@ -98,6 +98,8 @@ class Category:
     @property
     def contents(self):
         ul = ["<ul>"]
+        # put recent posts on top
+        self.pages.sort(key=lambda x: x.ctime, reverse=True)
         for page in self.pages:
             ul.append("<li>")
             ul.append(get_link(page))
@@ -137,9 +139,9 @@ def get_inventory():
             if file.endswith(".txt"):
                 title = file[:-4]
                 
-                if current_dir == "posts":
+                if current_dir == "articles":
                     fname = pathlib.Path(os.path.join(path, file))
-                    ctime = int(fname.stat().st_ctime)
+                    ctime = int(fname.stat().st_mtime)
                 else:
                     ctime = None
 
@@ -212,9 +214,12 @@ def output(slug):
         f.write(html)
 
 
-def output_all():
+def export_static_site():
     counter = 0
     start = time.time()
+
+    global inventory
+    inventory = get_inventory()
 
     clear_export_folder()
     copy_static()
@@ -230,6 +235,4 @@ def output_all():
         pages=counter,
         time=elapsed))
 
-
-inventory = get_inventory()
-output_all()
+export_static_site()

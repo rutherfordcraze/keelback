@@ -1,5 +1,5 @@
-## Recent Articles
-{{{ categories.posts.contents }}}
+## Articles
+{{{ categories.articles.contents }}}
 
 ## About
 {{{ categories.about.contents }}}
