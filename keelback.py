@@ -1,10 +1,11 @@
-import os, pathlib, time
+import os, pathlib, time, shutil, errno
 import markdown, pystache
 from datetime import datetime
 
 DIR_CONTENT     = "Content"
 DIR_TEMPLATES   = "Templates"
 DIR_EXPORT      = "Export"
+DIR_STATIC      = "Static"
 
 ###
 
@@ -78,7 +79,7 @@ class Category:
         self,
         title
         ):
-        self.title = title
+        self.title = title.capitalize()
         self.slug = title.lower().replace(" ", "_")
         self.pages = []
 
@@ -130,24 +131,23 @@ def get_inventory():
     inventory = {}
     for path, dirs, files in os.walk(DIR_CONTENT):
         current_dir = path.split('/')[-1]
-        if current_dir != "media":
-            if current_dir != "Content":
-                inventory[current_dir] = Category(current_dir)
-            for file in files:
-                if file.endswith(".txt"):
-                    title = file[:-4]
-                    
-                    if current_dir == "posts":
-                        fname = pathlib.Path(os.path.join(path, file))
-                        ctime = int(fname.stat().st_ctime)
-                    else:
-                        ctime = None
+        if current_dir != "Content":
+            inventory[current_dir] = Category(current_dir)
+        for file in files:
+            if file.endswith(".txt"):
+                title = file[:-4]
+                
+                if current_dir == "posts":
+                    fname = pathlib.Path(os.path.join(path, file))
+                    ctime = int(fname.stat().st_ctime)
+                else:
+                    ctime = None
 
-                    new_page = Page(path, title, ctime)
-                    inventory[new_page.slug] = new_page
+                new_page = Page(path, title, ctime)
+                inventory[new_page.slug] = new_page
 
-                    if current_dir != "Content":
-                        inventory[current_dir].add_page(new_page)
+                if current_dir != "Content":
+                    inventory[current_dir].add_page(new_page)
     return inventory
 
 
@@ -185,6 +185,26 @@ def assemble(slug):
     return r.render(template, props)
 
 
+def clear_export_folder():
+    shutil.rmtree(os.path.abspath(DIR_EXPORT))
+
+
+def tree_clone(source, destination):
+    try:
+        shutil.copytree(source, destination)
+    except OSError as e:
+        if e.errno == errno.ENOTDIR:
+            shutil.copy(source, destination)
+        else:
+            print('Directory not copied:\n{}'.format(str(e)))
+
+
+def copy_static():
+    source = os.path.abspath(os.path.join(DIR_STATIC))
+    destination = os.path.abspath(os.path.join(DIR_EXPORT, 'static'))
+    tree_clone(source, destination)
+
+
 def output(slug):
     html = assemble(slug)
 
@@ -195,9 +215,14 @@ def output(slug):
 def output_all():
     counter = 0
     start = time.time()
+
+    clear_export_folder()
+    copy_static()
+
     for slug in inventory.keys():
         output(slug)
         counter += 1
+
     stop = time.time()
     elapsed = int((stop - start) * 1000)
 
