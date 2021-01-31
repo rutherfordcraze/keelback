@@ -1,5 +1,5 @@
-## Articles
+### Articles
 {{{ categories.articles.contents }}}
 
-## About
+### About
 {{{ categories.about.contents }}}

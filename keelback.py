@@ -1,4 +1,4 @@
-import os, pathlib, time, shutil, errno
+import os, pathlib, time, shutil, errno, urllib
 import markdown, pystache
 from datetime import datetime
 
@@ -18,7 +18,7 @@ class Page:
         ):
         self.path = path
         self.title = title
-        self.slug = title.lower().replace(" ", "_")
+        self.slug = title.lower().replace(" ", "-")
         self.ctime = ctime
 
     def __repr__(self):
@@ -80,7 +80,7 @@ class Category:
         title
         ):
         self.title = title.capitalize()
-        self.slug = title.lower().replace(" ", "_")
+        self.slug = title.lower().replace(" ", "-")
         self.pages = []
 
     def __repr__(self):
@@ -97,19 +97,34 @@ class Category:
 
     @property
     def contents(self):
-        ul = ["<ul>"]
+        ol = ["<ol class='category'>"]
+        ul = ["<ul class='category'>"]
         # put recent posts on top
-        self.pages.sort(key=lambda x: x.ctime, reverse=True)
-        for page in self.pages:
-            ul.append("<li>")
-            ul.append(get_link(page))
-            if page.timestamp:
-                ul.append("<span class='timestamp'>")
-                ul.append(page.timestamp)
-                ul.append("</span>")
-            ul.append("</li>")
-        ul.append("</ul>")
-        return '\n'.join(ul)
+        # self.pages.sort(key=lambda x: x.ctime, reverse=True)
+        if self.pages[0].ctime:
+            self.pages.sort(key=lambda x: (x.ctime, x.title), reverse=True)
+            for page in self.pages:
+                ol.append("<li>")
+                ol.append(get_link(page))
+                if page.timestamp:
+                    ol.append("<span class='timestamp'>")
+                    ol.append(page.timestamp)
+                    ol.append("</span>")
+                ol.append("</li>")
+            ol.append("</ol>")
+            return '\n'.join(ol)
+        else:
+            self.pages.sort(key=lambda x: x.title, reverse=False)
+            for page in self.pages:
+                ul.append("<li>")
+                ul.append(get_link(page))
+                if page.timestamp:
+                    ul.append("<span class='timestamp'>")
+                    ul.append(page.timestamp)
+                    ul.append("</span>")
+                ul.append("</li>")
+            ul.append("</ul>")
+            return '\n'.join(ul)
     
 
     @property
