@@ -5,25 +5,11 @@
     --secondary: #999;
     --lines: #bbb;
 
-    --proportional: 'MD UI', ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    --proportional: 'shhh_its_unreleased', ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
     --monospace: 'MD IO', ui-monospace, Consolas, Monaco, monospace;
 
     --text-font-size: 15px;
     --text-line-height: 20px;
-}
-
-@font-face {
-    font-family: 'MD IO';
-    src: url('MDIO0.1-Regular.woff2') format('woff2'),
-         url('MDIO0.1-Regular.woff') format('woff');
-    font-weight: 400;
-}
-
-@font-face {
-    font-family: 'MD UI';
-    src: url('MDUI0.2-Regular.woff2') format('woff2'),
-         url('MDUI0.2-Regular.woff') format('woff');
-    font-weight: 400;
 }
 
 body {
