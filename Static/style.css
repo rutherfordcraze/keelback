@@ -114,6 +114,10 @@ ul.category li:before, ol.category li:before {
     margin-left: -0.4em;
 }
 
+li p {
+    margin-top: calc(var(--text-line-height) * -1);
+}
+
 main, footer {
     width: 100%;
     max-width: 500px;
