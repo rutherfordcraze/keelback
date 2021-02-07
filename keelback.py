@@ -1,6 +1,7 @@
-import os, pathlib, time, shutil, errno, urllib
+import os, pathlib, time, shutil, errno
 import markdown, pystache
 from datetime import datetime
+from slugify import slugify
 
 DIR_CONTENT     = "Content"
 DIR_TEMPLATES   = "Templates"
@@ -18,7 +19,7 @@ class Page:
         ):
         self.path = path
         self.title = title
-        self.slug = title.lower().replace(" ", "-")
+        self.slug = slugify(title)
         self.ctime = ctime
 
     def __repr__(self):
@@ -80,7 +81,7 @@ class Category:
         title
         ):
         self.title = title.capitalize()
-        self.slug = title.lower().replace(" ", "-")
+        self.slug = slugify(title)
         self.pages = []
 
     def __repr__(self):
