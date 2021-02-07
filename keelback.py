@@ -35,7 +35,7 @@ class Page:
     def body(self):
         template = markdown.markdown(self.content)
         r = pystache.Renderer()
-        return r.render(template, dict(categories=get_categories()))
+        return r.render(template, dict(categories=categories))
 
     @property
     def timestamp(self):
@@ -50,10 +50,13 @@ class Page:
         if self.slug == "index":
             crumb = []
         else:
-            crumb = [get_link(inventory["index"])]
+            crumb = [get_link(pages["index"])]
             for point in path[1:]:
-                if point in inventory:
-                    crumb.append(get_link(inventory[point]))
+                if point in categories:
+                    # hide categories if there is a page
+                    # with the same name as them
+                    if point != self.slug:
+                        crumb.append(get_link(categories[point]))
         crumb.append(get_link(self, True))
         return " / ".join(crumb)
     
@@ -78,8 +81,10 @@ class Page:
 class Category:
     def __init__(
         self,
+        path,
         title
         ):
+        self.path = path
         self.title = title.capitalize()
         self.slug = slugify(title)
         self.pages = []
@@ -92,7 +97,11 @@ class Category:
 
     @property
     def crumb(self):
-        crumb = [get_link(inventory["index"])]
+        path = self.path.split("/")
+        crumb = [get_link(pages["index"])]
+        for point in path[1:-1]:
+            if point in categories:
+                crumb.append(get_link(categories[point]))
         crumb.append(get_link(self, True))
         return " / ".join(crumb)
 
@@ -102,30 +111,32 @@ class Category:
         ul = ["<ul class='category'>"]
         # put recent posts on top
         # self.pages.sort(key=lambda x: x.ctime, reverse=True)
-        if self.pages[0].ctime:
-            self.pages.sort(key=lambda x: (x.ctime, x.title), reverse=True)
-            for page in self.pages:
-                ol.append("<li>")
-                ol.append(get_link(page))
-                if page.timestamp:
-                    ol.append("<span class='timestamp'>")
-                    ol.append(page.timestamp)
-                    ol.append("</span>")
-                ol.append("</li>")
-            ol.append("</ol>")
-            return '\n'.join(ol)
-        else:
-            self.pages.sort(key=lambda x: x.title, reverse=False)
-            for page in self.pages:
-                ul.append("<li>")
-                ul.append(get_link(page))
-                if page.timestamp:
-                    ul.append("<span class='timestamp'>")
-                    ul.append(page.timestamp)
-                    ul.append("</span>")
-                ul.append("</li>")
-            ul.append("</ul>")
-            return '\n'.join(ul)
+        if self.pages:
+            if self.pages[0].ctime:
+                self.pages.sort(key=lambda x: (x.ctime, x.title), reverse=True)
+                for page in self.pages:
+                    ol.append("<li>")
+                    ol.append(get_link(page))
+                    if page.timestamp:
+                        ol.append("<span class='timestamp'>")
+                        ol.append(page.timestamp)
+                        ol.append("</span>")
+                    ol.append("</li>")
+                ol.append("</ol>")
+                return '\n'.join(ol)
+            else:
+                self.pages.sort(key=lambda x: x.title, reverse=False)
+                for page in self.pages:
+                    ul.append("<li>")
+                    ul.append(get_link(page))
+                    if page.timestamp:
+                        ul.append("<span class='timestamp'>")
+                        ul.append(page.timestamp)
+                        ul.append("</span>")
+                    ul.append("</li>")
+                ul.append("</ul>")
+                return '\n'.join(ul)
+        return None
     
 
     @property
@@ -145,12 +156,13 @@ class Category:
 
 ###
 
-def get_inventory():
-    inventory = {}
+def get_content():
+    pages = {}
+    categories = {}
     for path, dirs, files in os.walk(DIR_CONTENT):
         current_dir = path.split('/')[-1]
         if current_dir != "Content":
-            inventory[current_dir] = Category(current_dir)
+            categories[current_dir] = Category(path, current_dir)
         for file in files:
             if file.endswith(".txt"):
                 title = file[:-4]
@@ -162,39 +174,32 @@ def get_inventory():
                     ctime = None
 
                 new_page = Page(path, title, ctime)
-                inventory[new_page.slug] = new_page
+                pages[new_page.slug] = new_page
 
                 if current_dir != "Content":
-                    inventory[current_dir].add_page(new_page)
-    return inventory
+                    categories[current_dir].add_page(new_page)
+    return (pages, categories)
 
 
-def get_categories():
-    if inventory:
-        categories = {}
-        for k, v in inventory.items():
-            value_type = v.__class__.__name__
-            if value_type == "Category":
-                categories[k] = v
-
-        return categories
-
-
-def get_link(page, highlit = False):
+def get_link(instance, highlit = False):    
     template = "<a href='/{slug}.html'>{title}</a>"
     if highlit:
         template = "<a href='/{slug}.html' class='highlit'>{title}</a>"
-    return template.format(slug=page.slug, title=page.title)
+    return template.format(slug=instance.slug, title=instance.title)
 
 
 def assemble(slug):
-    if slug not in inventory:
+    if slug not in pages and slug not in categories:
         return "404"
     elif slug == "" or slug == "/":
         slug = "index"
 
-    page = inventory[slug]
-    props = dict(page = page.html, title = page.title)
+    if slug in pages:
+        page = pages[slug]
+        props = dict(page = page.html, title = page.title)
+    elif slug in categories:
+        category = categories[slug]
+        props = dict(page = category.html, title = category.title)
 
     with open(os.path.join(DIR_TEMPLATES, "layout.html"), 'r') as f:
         template = f.read()
@@ -234,13 +239,17 @@ def export_static_site():
     counter = 0
     start = time.time()
 
-    global inventory
-    inventory = get_inventory()
+    global pages, categories
+    pages, categories = get_content()
 
     clear_export_folder()
     copy_static()
 
-    for slug in inventory.keys():
+    for slug in categories.keys():
+        output(slug)
+        counter += 1
+
+    for slug in pages.keys():
         output(slug)
         counter += 1
 
