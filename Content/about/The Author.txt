@@ -1,15 +1,22 @@
 Hi, I’m Rutherford. I’m a designer and developer, and the founder of [Mass-Driver](https://mass-driver.com/), a studio for typeface design and font production.
 
-I was born in the UK, and I currently live in The Hague (NL), where I studied for my MA in Type and Media in 2018–19. Prior to that, I studied graphic design at a university in the UK, and worked as a designer and developer for a web design agency.
+I’m interested in the way the tools we use influence the work we produce. My design practice includes writing scripts and software as a way to broaden the scope of what I can create.
+
+I was born in the UK, and I currently live in The Hague (NL), where I studied in 2018–19. Prior to that, I studied graphic design in the UK, and worked as a designer and developer for a web design agency.
 
 ## Currently
 
 - Working on typefaces.
 - Gradually improving my coffee setup.
 - Reading about spaceflight and rocketry.
-- Writing (occasionally) for this site.
+- Maintaining this site.
 
 ## Contact
 
 - [Twitter](https://twitter.com/rutherfordcraze)
 - [Mastodon](https://merveilles.town/web/accounts/40)
+
+## Education
+
+- MA Type and Media (Royal Academy of Art, The Hague)
+- BA Graphic Design (Falmouth University, UK)

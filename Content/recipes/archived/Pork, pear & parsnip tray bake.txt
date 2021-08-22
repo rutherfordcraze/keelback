@@ -13,7 +13,7 @@
 
 # Method
 
-Oven starts at 200°C
+Oven starts at 200°C.
 
 1. Trim fat & skin from chops. Cut into 3–4cm lengths and set aside.
 
