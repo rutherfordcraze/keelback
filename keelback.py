@@ -1,14 +1,19 @@
 import os, pathlib, time, shutil, errno
 import markdown, pystache
 from datetime import datetime
-from slugify import slugify
+# from slugify import slugify
 
 DIR_CONTENT     = "Content"
 DIR_TEMPLATES   = "Templates"
 DIR_EXPORT      = "Export"
 DIR_STATIC      = "Static"
 
+META_DELIMITER  = "====="
+
 ###
+
+def slugify(string):
+    return string.lower()
 
 class Page:
     def __init__(
@@ -21,21 +26,50 @@ class Page:
         self.title = title
         self.slug = slugify(title)
         self.ctime = ctime
+        self.split = None
 
     def __repr__(self):
         return "page:" + self.slug
 
+    def split_content(self):
+        if not self.split:
+            with open(os.path.join(self.path, self.title + ".txt"), 'r') as f:
+                split = f.read().strip().split(META_DELIMITER, 1)
+            # Split[0] will *always* be the content
+            # Split[1] will be meta only if present
+            self.split = (split[1],
+                          split[0]) if len(split) > 1 else (split[0], {})
+        return self.split
+
+
     @property
     def content(self):
-        with open(os.path.join(self.path, self.title + ".txt"), 'r') as f:
-            content = f.read().strip()
-        return content
+        print(self.meta)
+        return self.split_content()[0]
+
+    @property
+    def meta(self):
+        meta_dict = {}
+        if self.split_content()[1]:
+            meta_str = self.split_content()[1]
+            lines = meta_str.split("\n")
+            for line in lines:
+                line_split = line.split(": ", 1)
+                if len(line_split) > 1:
+                    k, v = line_split[0], line_split[1]
+                    meta_dict[k.lower()] = v
+            if 'title' not in meta_dict:
+                meta_dict['title'] = self.slug
+            return meta_dict
+        return {'title': self.slug}
 
     @property
     def body(self):
-        template = markdown.markdown(self.content)
-        r = pystache.Renderer()
-        return r.render(template, dict(categories=categories))
+        if self.content:
+            template = markdown.markdown(self.content)
+            r = pystache.Renderer()
+            return r.render(template, dict(categories=categories))
+        return ""
 
     @property
     def timestamp(self):
@@ -66,6 +100,7 @@ class Page:
         return dict(
             vars(self),
             body = self.body,
+            meta = self.meta,
             crumb = self.crumb,
             timestamp = self.timestamp)
 
@@ -196,7 +231,7 @@ def assemble(slug):
 
     if slug in pages:
         page = pages[slug]
-        props = dict(page = page.html, title = page.title)
+        props = dict(page = page.html, title = page.title, meta = page.meta)
     elif slug in categories:
         category = categories[slug]
         props = dict(page = category.html, title = category.title)
