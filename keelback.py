@@ -44,7 +44,6 @@ class Page:
 
     @property
     def content(self):
-        print(self.meta)
         return self.split_content()[0]
 
     @property
@@ -72,7 +71,19 @@ class Page:
         return ""
 
     @property
+    def time(self):
+        if self.meta:
+            if 'date' in self.meta:
+                return datetime.strptime(self.meta['date'], '%d-%m-%Y').timestamp()
+        if self.ctime:
+            return self.ctime
+        return None
+
+    @property
     def timestamp(self):
+        if self.meta:
+            if 'date' in self.meta:
+                return datetime.strptime(self.meta['date'], '%d-%m-%Y').strftime('%b %Y')
         if self.ctime:
             return datetime.utcfromtimestamp(self.ctime).strftime('%b %Y')
         return None
@@ -147,8 +158,8 @@ class Category:
         # put recent posts on top
         # self.pages.sort(key=lambda x: x.ctime, reverse=True)
         if self.pages:
-            if self.pages[0].ctime:
-                self.pages.sort(key=lambda x: (x.ctime, x.title), reverse=True)
+            if self.pages[0].time:
+                self.pages.sort(key=lambda x: (x.time, x.title), reverse=True)
                 for page in self.pages:
                     ol.append("<li>")
                     ol.append(get_link(page))

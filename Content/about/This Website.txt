@@ -1,3 +1,5 @@
+title: About This Website
+=====
 This site is a place for me to write and share my thoughts in a longer and more personal format than would be possible on social media. There’s no guiding theme to the content, except that it’s what I want to write about.
 
 The website itself is designed to be as simple and lightweight as possible. It uses a flat-file structure of text files in Markdown format, which are rendered according to HTML templates by a single ~250-line Python script. The exported site requires no JavaScript, and even the CSS is optional.

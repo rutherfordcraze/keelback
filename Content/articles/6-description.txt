@@ -1,3 +1,6 @@
+title: Greymarch Description
+date: 12-03-2021
+=====
 Greymarch is a text typeface which combines the historical flavour of Humanist calligraphy with more contemporary proportions and details. Intended for the more esoteric regions of editorial design, its shapes aim to be robust without becoming mechanical.
 
 The typeface has a distinct personality, though it does not limit itself to being entirely serious or entirely playful: instead, its rationalised take on the calligraphic model places Greymarch in a pragmatic middle ground between liveliness and neutrality. This makes it a versatile choice for a wide range of editorial contexts and applications.

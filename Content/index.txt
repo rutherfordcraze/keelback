@@ -1,4 +1,7 @@
-title: Index Page
-Example: Additional Meta
+title: Index
 =====
-This is the _index._
+### Articles
+{{{ categories.articles.contents }}}
+
+### About
+{{{ categories.about.contents }}}
