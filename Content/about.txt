@@ -1,0 +1,16 @@
+title: About
+=====
+## About Me
+
+Hi, I’m Rutherford. Born in the UK, currently based in The Hague, Netherlands. I’m a designer and developer specialising in type, and the founder of [Mass-Driver](https://mass-driver.com), a studio for typeface design and font production.
+
+## About the Site
+
+This site is a personal space for thoughts, side projects, and general reference. It’s part blog, part wiki, part digital garden. On a technical level, it’s designed to be minimal and accessible — it uses no JavaScript, and still works with CSS disabled.
+
+The site is built from plaintext files by a custom Python script and hosted as static HTML. `Monospaced text` is set in my own typeface, MD IO; the rest uses system defaults.
+
+## Contact
+
+- [Mastodon](https://merveilles.town/web/accounts/40)
+- [Email](mailto:rutherford@craze.co.uk)

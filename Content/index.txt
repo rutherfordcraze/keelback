@@ -1,7 +1,8 @@
-title: Index
+title: Index Page
 =====
-### Articles
-{{{ categories.articles.contents }}}
+## Posts
+{{{ categories.posts.contents }}}
 
-### About
-{{{ categories.about.contents }}}
+## Links
+{{{ pages.about.link }}}
+{{{ pages.reference.link }}}

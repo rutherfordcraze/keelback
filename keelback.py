@@ -43,6 +43,13 @@ class Page:
 
 
     @property
+    def link(self):
+        template = "<a href='/{slug}.html'>{title}</a>"
+        if 'title' in self.meta:
+            return template.format(slug=self.slug, title=self.meta['title'])
+        return template.format(slug=self.slug, title=self.title)
+
+    @property
     def content(self):
         return self.split_content()[0]
 
@@ -67,7 +74,7 @@ class Page:
         if self.content:
             template = markdown.markdown(self.content)
             r = pystache.Renderer()
-            return r.render(template, dict(categories=categories))
+            return r.render(template, dict(categories=categories, pages=pages))
         return ""
 
     @property
@@ -162,7 +169,8 @@ class Category:
                 self.pages.sort(key=lambda x: (x.time, x.title), reverse=True)
                 for page in self.pages:
                     ol.append("<li>")
-                    ol.append(get_link(page))
+                    # ol.append(get_link(page))
+                    ol.append(page.link)
                     if page.timestamp:
                         ol.append("<span class='timestamp'>")
                         ol.append(page.timestamp)
@@ -174,7 +182,8 @@ class Category:
                 self.pages.sort(key=lambda x: x.title, reverse=False)
                 for page in self.pages:
                     ul.append("<li>")
-                    ul.append(get_link(page))
+                    # ul.append(get_link(page))
+                    ul.append(page.link)
                     if page.timestamp:
                         ul.append("<span class='timestamp'>")
                         ul.append(page.timestamp)
@@ -242,10 +251,15 @@ def assemble(slug):
 
     if slug in pages:
         page = pages[slug]
-        props = dict(page = page.html, title = page.title, meta = page.meta)
+        props = dict(page = page.html,
+                    title = page.title,
+                    meta = page.meta,
+                    pages = pages)
     elif slug in categories:
         category = categories[slug]
-        props = dict(page = category.html, title = category.title)
+        props = dict(page = category.html,
+                    title = category.title,
+                    pages = pages)
 
     with open(os.path.join(DIR_TEMPLATES, "layout.html"), 'r') as f:
         template = f.read()

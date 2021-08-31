@@ -1,4 +1,0 @@
-title: Index Page
-Example: Additional Meta
-=====
-This is the _index._

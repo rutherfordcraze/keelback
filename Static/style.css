@@ -9,8 +9,13 @@
     --monospace: 'MD IO', ui-monospace, Consolas, Monaco, monospace;
 
     --text-font-size: 15px;
-    --text-line-height: 20px;
+    --text-line-height: 1.4;
+
+    --h-margin: 40px;
+    --v-margin: 50px;
 }
+
+* { box-sizing: border-box; }
 
 body {
     margin: 0px;
@@ -24,25 +29,38 @@ body {
     line-height: var(--text-line-height);
 }
 
+em { font-style: italic; }
+strong { font-weight: 700; }
+
 h1 {
-    margin-top: 40px;
-    border-bottom: 1px solid var(--text);
-    font-weight: normal;
-    font-size: var(--text-font-size);
-    line-height: var(--text-line-height);
+    margin-top: var(--h-margin);
+    font-weight: 700;
+    font-size: 2em;
+    letter-spacing: -0.01em;
+    line-height: 1.1;
 }
 
 h2 {
-    margin-top: 40px;
-    border-bottom: 1px solid var(--lines);
+    margin-top: var(--h-margin);
+    border-bottom: 1px solid var(--text);
+    font-weight: normal;
+    /*color: var(--secondary);*/
+    /*font-size: var(--text-font-size);*/
+    font-size: 1.5em;
+    line-height: 1.4;
+}
+
+h3 {
+    margin-top: var(--h-margin);
     font-weight: normal;
     color: var(--secondary);
+    border-bottom: 1px solid var(--lines);
     font-size: var(--text-font-size);
     line-height: var(--text-line-height);
 }
 
-h3 {
-    margin-top: 40px;
+h4 {
+    margin-top: var(--h-margin);
     font-weight: normal;
     color: var(--secondary);
     font-size: var(--text-font-size);
@@ -50,7 +68,7 @@ h3 {
 }
 
 hr {
-    margin: 40px 0px;
+    margin: var(--h-margin) 0px;
     border: none;
     border-bottom: 1px solid var(--lines);
 }
@@ -98,6 +116,14 @@ ol, ul {
     padding: 0px 0px 0px 30px;
 }
 
+ol.category,
+ul.category { padding-left: 0px; }
+
+/*.category_page ol.category,
+.category_page ul.category {
+    padding-left: 30px;
+}*/
+
 ol { counter-reset: list-number; }
 ol li:before, ul li:before {
     margin-left: -1.2em; /* MD IO’s glyphs are exactly 0.6em wide */
@@ -120,16 +146,16 @@ li p {
 
 main, footer {
     width: 100%;
-    max-width: 500px;
-    padding: 50px;
+    max-width: 50em;
+    padding: var(--v-margin);
     margin: 0px auto;
 }
 
-main { min-height: calc(100vh - 200px); }
-footer { padding: 40px 50px; }
+main { min-height: calc(100vh - 100px); }
+footer { padding: var(--h-margin) var(--v-margin); }
 
 .crumb {
-    margin-bottom: 50px;
+    margin-bottom: var(--h-margin);
 
     text-transform: lowercase;
     font-family: var(--monospace);
@@ -148,4 +174,11 @@ a.highlit:hover { color: var(--background); }
 .timestamp {
     color: var(--secondary);
     float: right;
+}
+
+@media only screen and (max-width: 600px) {
+    :root {
+        --text-font-size: 14px;
+        --v-margin: 25px;
+    }
 }

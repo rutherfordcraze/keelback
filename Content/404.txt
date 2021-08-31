@@ -1,1 +1,7 @@
-The requested page could not be found.
+title: Page Not Found
+=====
+## The requested page could not be found.
+
+You may have followed a broken link, or typed the address incorrectly. If you think there should be something here, please let me know.
+
+Return to the [index](/index.html)?
