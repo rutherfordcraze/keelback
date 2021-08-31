@@ -119,11 +119,6 @@ ol, ul {
 ol.category,
 ul.category { padding-left: 0px; }
 
-/*.category_page ol.category,
-.category_page ul.category {
-    padding-left: 30px;
-}*/
-
 ol { counter-reset: list-number; }
 ol li:before, ul li:before {
     margin-left: -1.2em; /* MD IO’s glyphs are exactly 0.6em wide */
