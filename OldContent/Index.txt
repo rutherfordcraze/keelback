@@ -1,7 +1,0 @@
-title: Index
-=====
-### Articles
-{{{ categories.articles.contents }}}
-
-### About
-{{{ categories.about.contents }}}

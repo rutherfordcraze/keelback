@@ -1,5 +1,0 @@
-### Vegetarian
-{{{ categories.vegetarian.contents }}}
-
-### Non-vegetarian
-{{{ categories.non-vegetarian.contents }}}
