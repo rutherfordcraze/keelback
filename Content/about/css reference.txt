@@ -1,6 +1,6 @@
 Title: CSS Reference
 =====
-# H1 (Top Level Heading) — this one will run across two lines or more.
+# H1 (Top Level Heading)
 ## H2 (Secondary Heading)
 ### H3 (Tertiary Heading)
 #### H4 (Fourth-level Heading)
@@ -13,13 +13,12 @@ Regular, _Italic,_ **Bold, _Bold Italic._**
 
 > An indented blockquote.
 
-Inline `code` has `back-ticks` around it.
-
 -   An unordered list
     - With a sublist
 -   and another point
 
-```
-No language indicated, so no syntax highlighting. 
-But let's throw in a <b>tag</b>.
-```
+Inline `code` has `back-ticks` around it.
+
+    Code/Pre Block
+    There’s no syntax highlighting here.
+    Let's throw in a <b>tag</b>

@@ -44,7 +44,7 @@ class Page:
 
     @property
     def link(self):
-        template = "<a href='/{slug}.html'>{title}</a>"
+        template = "<a href='./{slug}.html'>{title}</a>"
         if 'title' in self.meta:
             return template.format(slug=self.slug, title=self.meta['title'])
         return template.format(slug=self.slug, title=self.title)
@@ -237,9 +237,9 @@ def get_content():
 
 
 def get_link(instance, highlit = False):    
-    template = "<a href='/{slug}.html'>{title}</a>"
+    template = "<a href='./{slug}.html'>{title}</a>"
     if highlit:
-        template = "<a href='/{slug}.html' class='highlit'>{title}</a>"
+        template = "<a href='./{slug}.html' class='highlit'>{title}</a>"
     return template.format(slug=instance.slug, title=instance.title)
 
 
@@ -254,12 +254,14 @@ def assemble(slug):
         props = dict(page = page.html,
                     title = page.title,
                     meta = page.meta,
-                    pages = pages)
+                    pages = pages,
+                    buildtime = buildtime)
     elif slug in categories:
         category = categories[slug]
         props = dict(page = category.html,
                     title = category.title,
-                    pages = pages)
+                    pages = pages,
+                    buildtime = buildtime)
 
     with open(os.path.join(DIR_TEMPLATES, "layout.html"), 'r') as f:
         template = f.read()
@@ -301,6 +303,9 @@ def export_static_site():
 
     global pages, categories
     pages, categories = get_content()
+
+    global buildtime
+    buildtime = datetime.now().strftime('%Y·%m·%d %H:%M')
 
     clear_export_folder()
     copy_static()

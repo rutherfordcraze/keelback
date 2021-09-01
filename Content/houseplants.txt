@@ -1,0 +1,8 @@
+title: Houseplants
+=====
+- Tradescantia pallida
+- Dypsis lutescens
+- Crassula ovata ‘Gollum’
+- Pilea peperomioides
+- Pilea mollis
+- Aglaonema ‘Wishes’

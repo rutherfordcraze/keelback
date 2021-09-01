@@ -1,0 +1,8 @@
+title: Recipes
+=====
+These recipes are from a handful of sources: some I learned growing up, others are adapted from books or websites, and some are entirely my own inventions. Where possible I’ll always try to credit the source.
+
+While I’m not vegetarian, I try to limit my consumption of animal products as much as I can. None of these recipes are dependent on meat or fish, and most can be adapted to be entirely plant-based.
+
+## Pages in this category
+{{{ categories.recipes.contents }}}

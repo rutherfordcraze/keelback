@@ -85,6 +85,12 @@ code {
     line-height: var(--text-line-height);
 }
 
+pre code {
+    width: 100%;
+    padding: 0.6em 1.2em;
+    overflow-x: scroll;
+}
+
 blockquote {
     margin: 20px 0px;
     border-left: 1px solid var(--lines);
@@ -95,16 +101,20 @@ blockquote {
 a {  color: inherit; text-decoration: none; }
 
 article a::before {
-    content: "[";
+    content: "{";
     padding: 0px 1px;
 }
 article a::after {
-    content: "]";
+    content: "}";
     padding: 0px 1px;
 }
-article a:hover {
-    color: var(--secondary);
-}
+
+article a:hover { color: var(--secondary); }
+
+article a[href^="http://"]::before,
+article a[href^="https://"]::before { content: "["; }
+article a[href^="http://"]::after,
+article a[href^="https://"]::after { content: "]"; }
 
 nav a:hover { color: var(--secondary); }
 footer a:hover { color: var(--secondary); }
@@ -122,6 +132,7 @@ ul.category { padding-left: 0px; }
 ol { counter-reset: list-number; }
 ol li:before, ul li:before {
     margin-left: -1.2em; /* MD IO’s glyphs are exactly 0.6em wide */
+    float: left;
     font-family: var(--monospace);
     color: var(--secondary);
     content: counter(list-number) " ";
@@ -141,13 +152,16 @@ li p {
 
 main, footer {
     width: 100%;
-    max-width: 50em;
+    max-width: 46em;
     padding: var(--v-margin);
     margin: 0px auto;
 }
 
 main { min-height: calc(100vh - 100px); }
 footer { padding: var(--h-margin) var(--v-margin); }
+
+.footer__nocss_divider { display: none; }
+.footer__right { float: right; color: var(--secondary); }
 
 .crumb {
     margin-bottom: var(--h-margin);
@@ -176,4 +190,7 @@ a.highlit:hover { color: var(--background); }
         --text-font-size: 14px;
         --v-margin: 25px;
     }
+
+    .footer__nocss_divider { display: initial; }
+    .footer__right { float: initial; }
 }

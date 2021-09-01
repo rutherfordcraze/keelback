@@ -1,8 +1,8 @@
-title: Index Page
+title: Index
 =====
+# Rutherford Craze is a type designer and developer interested in visual systems, technology, and tools.
+
+{{{ pages.about.link }}} &sdot; {{{ pages.now.link }}}
+
 ## Posts
 {{{ categories.posts.contents }}}
-
-## Links
-{{{ pages.about.link }}}
-{{{ pages.reference.link }}}
