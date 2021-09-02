@@ -1,0 +1,4 @@
+Title: Example Older Post
+Date: 19-06-2021
+=====
+This is an example blog post with a `date` meta attribute — if every page in the `posts` category has this attribute, they’ll be listed in reverse chronological order (newest at the top) on the [category page](./posts.html).

@@ -1,8 +1,8 @@
 title: Index
 =====
-# Rutherford Craze is a type designer and developer interested in visual systems, technology, and tools.
+# This is a demo site built using Keelback
 
-{{{ pages.about.link }}} &sdot; {{{ pages.now.link }}}
+{{{ pages.about.link }}} &sdot; {{{ pages.css reference.link }}}
 
 ## Posts
 {{{ categories.posts.contents }}}

@@ -6,7 +6,7 @@
     --lines: #bbb;
 
     --proportional: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-    --monospace: 'MD IO', ui-monospace, Consolas, Monaco, monospace;
+    --monospace: ui-monospace, Consolas, Monaco, monospace;
 
     --text-font-size: 15px;
     --text-line-height: 1.4;
