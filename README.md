@@ -1,5 +1,4 @@
-# keelback
-Static site generator
+# Keelback · Static Site Generator
 
 > __This is not ‘good’ software.__
 > You are free to use it, but please bear in mind it’s a janky personal project. It might not work the way you want it to. It might not work at all.
