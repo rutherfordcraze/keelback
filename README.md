@@ -9,11 +9,11 @@ Keelback is a flat-file static site builder written in Python. It’s designed t
 
 Content is stored in txt files and rendered using Markdown, with templates written in html and rendered with Pystache. Static objects like stylesheets and images are not modified.
 
-## Usage
+## Installation & Usage
 
-### Installation
+### Install
 
-Create a virtual environment and activate it:
+After cloning the repo, create a virtual environment and activate it:
 ```
 $ python3 -m venv .venv
 $ source .venv/bin/activate
@@ -24,7 +24,7 @@ Install the requirements:
 $ pip install -r requirements.txt
 ```
 
-### Export
+### Use
 
 The `config.json` file contains a few configurable settings, like the content and export directories. When you’ve made the desired changes, run Keelback:
 ```
