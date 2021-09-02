@@ -210,13 +210,13 @@ def get_content():
     categories = {}
     for path, dirs, files in os.walk(DIR_CONTENT):
         current_dir = path.split('/')[-1]
-        if current_dir != "Content":
+        if current_dir.lower() != "content":
             categories[current_dir] = Category(path, current_dir)
         for file in files:
             if file.endswith(".txt"):
                 title = file[:-4]
                 
-                if current_dir == "articles":
+                if current_dir.lower() == "articles":
                     fname = pathlib.Path(os.path.join(path, file))
                     ctime = int(fname.stat().st_mtime)
                 else:
@@ -225,7 +225,7 @@ def get_content():
                 new_page = Page(path, title, ctime)
                 pages[new_page.slug] = new_page
 
-                if current_dir != "Content":
+                if current_dir.lower() != "content":
                     categories[current_dir].add_page(new_page)
     return (pages, categories)
 
