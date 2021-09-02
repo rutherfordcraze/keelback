@@ -1,0 +1,8 @@
+{
+    "dir_content":   "./Content",
+    "dir_templates": "./Templates",
+    "dir_export":    "./Export",
+    "dir_static":    "./Static",
+
+    "meta_delimiter": "====="
+}

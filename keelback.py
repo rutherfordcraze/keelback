@@ -1,14 +1,8 @@
-import os, pathlib, time, shutil, errno
+import os, pathlib, time, shutil, errno, json
 import markdown, pystache
 from datetime import datetime
-# from slugify import slugify
 
-DIR_CONTENT     = "Content"
-DIR_TEMPLATES   = "Templates"
-DIR_EXPORT      = "Export"
-DIR_STATIC      = "Static"
-
-META_DELIMITER  = "====="
+CONFIG_FILE = "./config.json"
 
 ###
 
@@ -296,10 +290,25 @@ def output(slug):
     with open(os.path.join(DIR_EXPORT, slug + ".html"), 'w') as f:
         f.write(html)
 
+def load_config():
+    with open(CONFIG_FILE, 'r') as f:
+        config = json.load(f)
+    
+    # todo: don’t hard code these
+    global DIR_CONTENT, DIR_TEMPLATES, DIR_EXPORT, DIR_STATIC, META_DELIMITER
+
+    DIR_CONTENT   = config['dir_content']
+    DIR_TEMPLATES = config['dir_templates']
+    DIR_EXPORT    = config['dir_export']
+    DIR_STATIC    = config['dir_static']
+    META_DELIMITER = config['meta_delimiter']
+
 
 def export_static_site():
     counter = 0
     start = time.time()
+
+    load_config()
 
     global pages, categories
     pages, categories = get_content()
