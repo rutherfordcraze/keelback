@@ -225,9 +225,9 @@ def get_content(content_dir: str, template_dir: str, meta_delimiter: str):
 
 
 def get_link(instance, highlit=False):
-    template = "<a href='./{slug}.html'>{title}</a>"
+    template = "<a href='./{slug}'>{title}</a>"
     if highlit:
-        template = "<a href='./{slug}.html' class='highlit'>{title}</a>"
+        template = "<a href='./{slug}' class='highlit'>{title}</a>"
     return template.format(slug=instance.slug, title=instance.title)
 
 
